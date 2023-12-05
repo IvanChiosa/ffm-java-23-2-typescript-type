@@ -5,6 +5,10 @@ function App() {
     type NumericGrade = 0 | 1 | 2 | 3 | 4 | 5;
     type LetterGrade = 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
+    interface Transcript {
+        [subject: string]: NumericGrade | LetterGrade | undefined;
+    }
+
 
     function outputStudent(student: Student): void {
         console.log('='.repeat(30));
@@ -26,22 +30,42 @@ function App() {
         firstName: string;
         lastName: string;
         age: number;
-        grades: (NumericGrade | LetterGrade | undefined)[];
+        transcript?: Transcript;
     }
 
     function outputStudent1(student: Student1): void {
-        console.log('='.repeat(30));
+        const nameLength = student.firstName.length + student.lastName.length + String(student.age).length;
+        const nameSeparator = '='.repeat(nameLength);
+
         console.log(`${student.firstName} ${student.lastName} (${student.age})`);
         console.log('='.repeat(30));
-        console.log('Noten:', student.grades.map(grade => (grade === undefined ? '*' : grade)));
+        console.log('Noten:');
+
+        for (const subject in student.transcript) {
+            if (Object.prototype.hasOwnProperty.call(student.transcript, subject)) {
+                const grade = student.transcript[subject];
+                console.log(`${subject}: ${grade === undefined ? '*' : grade}`);
+            }
+
+        }
+        console.log(nameSeparator);
     }
 
     const exampleStudent1: Student1 = {
         firstName: 'Ivan',
         lastName: 'Chiosa',
         age: 35,
-        grades: ['A', 2, "F", 3, 1, "B", 2, 5, undefined],
-    };
+        transcript: {
+            'Math': 1,
+            'English': 4,
+            'History': 3,
+            'Geography': 1,
+            'Physics': 3,
+            'Chemistry': 2,
+            'Biology': 1,
+        }
+    }
+
     outputStudent1(exampleStudent1);
 
 
@@ -49,24 +73,44 @@ function App() {
         students.forEach(student => outputStudent1(student));
     }
 
-    const studentList : Student1[] = [
+    const studentList: Student1[] = [
         {
             firstName: 'Ivan',
             lastName: 'Chiosa',
             age: 35,
-            grades: ['A', 2, "F", 3, 1, "B", 2, 5, undefined],
+            transcript: {
+                'Math': 1,
+                'History': 3,
+                'Geography': 1,
+                'Physics': 3,
+                'Chemistry': 2,
+            }
         },
         {
             firstName: 'Mario',
             lastName: 'Rossi',
             age: 35,
-            grades: ['A', 2, "F", 3, 1, "B", 2, 5, undefined],
+            transcript: {
+                'Math': 1,
+                'English': 4,
+                'History': 3,
+                'Geography': 1,
+                'Physics': 3,
+                'Biology': 1,
+            }
         },
         {
             firstName: 'Natali',
             lastName: 'Dora',
             age: 35,
-            grades: ['A', 2, "F", 3, 1, "B", 2, 5, undefined],
+            transcript: {
+                'Math': 1,
+                'English': 4,
+                'Geography': 1,
+                'Physics': 3,
+                'Chemistry': 2,
+                'Biology': 1,
+            }
         }
     ]
     printAllStudents(studentList);
